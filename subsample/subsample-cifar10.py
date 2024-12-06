@@ -11,7 +11,7 @@ def main():
     SRC_DIR=sys.argv[1]
     DEST_DIR=sys.argv[2]
 
-    input_file = os.path.join(SRC_DIR, 'cifar-100-python.tar.gz')
+    input_file = os.path.join(SRC_DIR, 'cifar-10-python.tar.gz')
     tar_file = tarfile.open(input_file, 'r:gz')
 
     batches = []
