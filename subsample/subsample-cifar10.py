@@ -36,23 +36,18 @@ def main():
 
     def subsample(labels, images):
         # See https://stackoverflow.com/questions/62547807/how-to-create-cifar-10-subset
+        df = pd.DataFrame(list(zip(images, labels)), columns =['images', 'labels']) 
+        val = df.sample(frac=0.05, random_state=0)
+        return ( val, len(val['images']) )
 
-        #creating the validation set from the training set
-        df = pd.DataFrame(list(zip(images, labels)), columns =['image', 'labels']) 
-        val = df.sample(frac=0.05)
-        X_train = np.array([ i for i in list(val['image'])])
-        y_train = np.array([ i for i in list(val['labels'])])
+    train_df, train_size = subsample(train['labels'], train['data'])
+    test_df, test_size = subsample(test['labels'], test['data'])
 
-        return ( X_train, y_train, val )
+    print("Subsampled training: ", train_size)
+    print("Subsampled testing: ", test_size)
 
-    train_feat, train_labels, train_df = subsample(train['labels'], train['data'])
-    test_feat, test_labels, test_df = subsample(test['labels'], test['data'])
-
-    print("Subsampled training: ", len(train_feat))
-    print("Subsampled testing: ", len(test_feat))
-
-    train_df.to_pickle("datasets/subsample/cifar10/data")
-    test_df.to_pickle("datasets/subsample/cifar10/train")
+    train_df.to_pickle("datasets/subsample/cifar10/train_batch")
+    test_df.to_pickle("datasets/subsample/cifar10/test_batch")
     
 
 if __name__ == '__main__':

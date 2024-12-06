@@ -26,21 +26,18 @@ def main():
         # See https://stackoverflow.com/questions/62547807/how-to-create-cifar-10-subset
 
         #creating the validation set from the training set
-        df = pd.DataFrame(list(zip(images, f_labels, c_labels)), columns =['image', 'fine_labels', 'coarse_labels']) 
+        df = pd.DataFrame(list(zip(images, f_labels, c_labels)), columns =['images', 'fine_labels', 'coarse_labels']) 
         val = df.sample(frac=0.05, random_state=0)
-        X_train = np.array([ i for i in list(val['image'])])
-        y_train = np.array([ i for i in list(val['fine_labels'])])
+        return ( val, len(val['images']) )
 
-        return ( X_train, y_train, val )
+    train_df, train_size = subsample(train['fine_labels'], train['coarse_labels'], train['data'])
+    test_df, test_size = subsample(test['fine_labels'], test['coarse_labels'], test['data'])
 
-    train_feat, train_labels, train_df = subsample(train['fine_labels'], train['coarse_labels'], train['data'])
-    test_feat, test_labels, test_df = subsample(test['fine_labels'], test['coarse_labels'], test['data'])
+    print("Subsampled training: ", train_size)
+    print("Subsampled testing: ", test_size)
 
-    print("Subsampled training: ", len(train_feat))
-    print("Subsampled testing: ", len(test_feat))
-
-    train_df.to_pickle("datasets/subsample/cifar100/data")
-    test_df.to_pickle("datasets/subsample/cifar100/train")
+    train_df.to_pickle("datasets/subsample/cifar100/train_batch")
+    test_df.to_pickle("datasets/subsample/cifar100/test_batch")
     
 
 if __name__ == '__main__':
