@@ -2,14 +2,17 @@ import tarfile
 import numpy as np
 import pandas as pd
 import os
+import sys
 from six.moves import cPickle
 
 def main():
     # See https://github.com/mila-iqia/fuel/blob/master/fuel/converters/cifar100.py
 
-    input_file = os.path.join("datasets/raw", 'cifar-10-python.tar.gz')
-    tar_file = tarfile.open(input_file, 'r:gz')
+    SRC_DIR=sys.argv[1]
+    DEST_DIR=sys.argv[2]
 
+    input_file = os.path.join(SRC_DIR, 'cifar-100-python.tar.gz')
+    tar_file = tarfile.open(input_file, 'r:gz')
 
     batches = []
     for k in range(1, 6):    
@@ -46,8 +49,8 @@ def main():
     print("Subsampled training: ", train_size)
     print("Subsampled testing: ", test_size)
 
-    train_df.to_pickle("datasets/subsample/cifar10/train_batch")
-    test_df.to_pickle("datasets/subsample/cifar10/test_batch")
+    train_df.to_pickle(os.path.join(DEST_DIR, 'train_batch'))
+    test_df.to_pickle(os.path.join(DEST_DIR, 'test_batch'))
     
 
 if __name__ == '__main__':
