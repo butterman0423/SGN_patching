@@ -213,13 +213,16 @@ def main(argv):
   ds_info = _ds_builder.info
   batch_size = FLAGS.per_core_batch_size * FLAGS.num_cores
   train_dataset_size = (
-      ds_info.splits['train'].num_examples * FLAGS.train_proportion)
+          ds_info.splits['train[:5%]'].num_examples * FLAGS.train_proportion)
   steps_per_epoch = int(train_dataset_size / batch_size)
   logging.info('Steps per epoch %s', steps_per_epoch)
-  logging.info('Size of the dataset %s', ds_info.splits['train'].num_examples)
+  logging.info('Size of the dataset %s', ds_info.splits['train[:5%]'].num_examples)
   logging.info('Train proportion %s', FLAGS.train_proportion)
-  steps_per_eval = ds_info.splits['test'].num_examples // batch_size
+  steps_per_eval = ds_info.splits['test[:5%]'].num_examples // batch_size
   num_classes = ds_info.features['label'].num_classes
+
+  tfds.Split.TRAIN = "train[:5%]"
+  tfds.Split.TEST = "test[:5%]"
 
   train_builder = ub.datasets.get(
       FLAGS.dataset,
