@@ -207,7 +207,7 @@ def main(argv):
   strategy = tf.distribute.MirroredStrategy()
   
   _ds_builder=tfds.builder(FLAGS.dataset, data_dir=data_dir)
-  #_ds_builder.download_and_prepare()
+  _ds_builder.download_and_prepare()
 
   #ds_info = tfds.builder(FLAGS.dataset, data_dir=data_dir).info
   ds_info = _ds_builder.info
